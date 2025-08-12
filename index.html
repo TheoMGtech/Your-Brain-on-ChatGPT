@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Dívida Cognitiva da IA: Uma Análise Interativa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1f2937;
+            color: #f9fafb;
+        }
+        .nav-button {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .nav-button.active {
+            color: #f59e0b;
+            border-bottom-color: #f59e0b;
+        }
+        .nav-button:not(.active):hover {
+            color: #fcd34d;
+            border-bottom-color: #fcd34d;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .tab-button.active {
+            background-color: #f59e0b;
+            color: #ffffff;
+        }
+        .tab-button {
+            transition: background-color 0.3s ease;
+        }
+        .highlight {
+            background-color: #fde047;
+            color: #1f2937;
+        }
+        .speaker-button {
+            background: none;
+            border: none;
+            color: #f59e0b;
+            cursor: pointer;
+            font-size: 1.2rem;
+            margin-left: 0.5rem;
+            vertical-align: middle;
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #f59e0b;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+            display: none;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .gemini-response {
+            border-left: 4px solid #f59e0b;
+            background-color: #374151;
+            font-style: italic;
+            padding: 1rem;
+            border-radius: 0.5rem;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="min-h-screen container mx-auto px-4 py-8 md:py-12">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-amber-500 mb-2">A Dívida Cognitiva da IA</h1>
+            <p class="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">Uma análise interativa sobre o impacto da Inteligência Artificial na cognição e na aprendizagem.</p>
+            <div class="mt-8 relative max-w-lg mx-auto">
+                <input type="text" id="searchInput" placeholder="Pesquisar no relatório..." class="w-full pl-10 pr-4 py-2 rounded-full text-gray-900 bg-gray-200 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3">
+                    <svg class="h-5 w-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+            </div>
+        </header>
+
+        <nav class="flex justify-center border-b-2 border-gray-700 mb-10">
+            <button data-target="paradoxo" class="nav-button active text-sm md:text-base font-semibold py-3 px-4 md:px-6 border-b-2 border-transparent">O Paradoxo</button>
+            <button data-target="neural" class="nav-button text-sm md:text-base font-semibold py-3 px-4 md:px-6 border-b-2 border-transparent">Evidência Neural</button>
+            <button data-target="comportamental" class="nav-button text-sm md:text-base font-semibold py-3 px-4 md:px-6 border-b-2 border-transparent">Evidência Comportamental</button>
+            <button data-target="adaptacao" class="nav-button text-sm md:text-base font-semibold py-3 px-4 md:px-6 border-b-2 border-transparent">Adaptação</button>
+            <button data-target="conclusao" class="nav-button text-sm md:text-base font-semibold py-3 px-4 md:px-6 border-b-2 border-transparent">Conclusão</button>
+        </nav>
+
+        <main>
+            <section id="paradoxo" class="content-section active">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-gray-100">O Paradoxo da IA: Promessa vs. Custo</h2>
+                    <p class="mt-2 text-gray-300 max-w-2xl mx-auto">A IA na educação é uma espada de dois gumes. Ela oferece ganhos de eficiência, mas pode ter um custo cognitivo oculto. Explore como a IA impacta diferentes facetas da aprendizagem clicando nos tópicos abaixo.</p>
+                </div>
+
+                <div class="flex justify-center flex-wrap gap-2 mb-8">
+                    <button data-tab="carga" class="tab-button active bg-gray-700 text-gray-100 font-semibold py-2 px-4 rounded-full text-sm">Carga Cognitiva</button>
+                    <button data-tab="critico" class="tab-button bg-gray-700 text-gray-100 font-semibold py-2 px-4 rounded-full text-sm">Pensamento Crítico</button>
+                    <button data-tab="memoria" class="tab-button bg-gray-700 text-gray-100 font-semibold py-2 px-4 rounded-full text-sm">Memória e Propriedade</button>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-gray-800 p-6 rounded-lg shadow-md border-l-4 border-blue-500">
+                        <h3 class="text-2xl font-bold text-blue-400 mb-3">✅ A Promessa</h3>
+                        <div id="promise-content" class="text-gray-300 space-y-3"></div>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded-lg shadow-md border-l-4 border-red-500">
+                        <h3 class="text-2xl font-bold text-red-400 mb-3">❌ O Custo</h3>
+                        <div id="cost-content" class="text-gray-300 space-y-3"></div>
+                    </div>
+                </div>
+                <div class="text-center mt-8">
+                    <button id="generateAnalysisBtn" class="bg-amber-500 text-white font-bold py-2 px-6 rounded-full shadow-md hover:bg-amber-600 transition duration-300">
+                        Gerar Análise ✨
+                    </button>
+                    <div id="analysisLoader" class="loader mt-4"></div>
+                    <div id="geminiAnalysis" class="mt-4 p-4 text-left hidden"></div>
+                </div>
+            </section>
+
+            <section id="neural" class="content-section">
+                 <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-gray-100">Evidência Neural: O Cérebro sob IA</h2>
+                    <p id="neuralParagraph" class="mt-2 text-gray-300 max-w-2xl mx-auto inline">A análise de EEG do estudo revela como o cérebro reage de forma diferente com e sem assistência de IA. Menos suporte externo leva a uma conectividade neural mais forte e difundida. Selecione uma banda de frequência para ver a diferença.</p><button class="speaker-button" data-text-id="neuralParagraph">🔊</button>
+                </div>
+                <div class="flex justify-center flex-wrap gap-2 mb-8">
+                    <button data-band="Alpha" class="band-button bg-amber-500 text-white font-semibold py-2 px-4 rounded-full text-sm">Alpha (8-12 Hz)</button>
+                    <button data-band="Beta" class="band-button bg-gray-700 text-gray-100 font-semibold py-2 px-4 rounded-full text-sm">Beta (12-30 Hz)</button>
+                    <button data-band="Theta" class="band-button bg-gray-700 text-gray-100 font-semibold py-2 px-4 rounded-full text-sm">Theta (4-8 Hz)</button>
+                    <button data-band="Delta" class="band-button bg-gray-700 text-gray-100 font-semibold py-2 px-4 rounded-full text-sm">Delta (0.1-4 Hz)</button>
+                </div>
+                <div class="grid md:grid-cols-5 gap-8 items-center">
+                    <div class="md:col-span-3 bg-gray-800 p-4 rounded-lg shadow-md">
+                        <div class="chart-container">
+                            <canvas id="neuralChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="md:col-span-2 bg-gray-800 p-6 rounded-lg shadow-md">
+                        <h3 id="band-title" class="text-xl font-bold text-gray-100 mb-3"></h3>
+                        <p id="band-explanation" class="text-gray-300"></p>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="comportamental" class="content-section">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-gray-100">Evidência Comportamental: Conhecimento Desincorporado</h2>
+                    <p id="comportamentalParagraph" class="mt-2 text-gray-300 max-w-2xl mx-auto inline">O uso da IA não afeta apenas o cérebro, mas também o comportamento. Os dados mostram um impacto claro na capacidade de lembrar fontes e no senso de autoria, sugerindo que o conhecimento não está sendo totalmente integrado.</p><button class="speaker-button" data-text-id="comportamentalParagraph">🔊</button>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-gray-800 p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-bold text-center mb-4 text-gray-100">Precisão de Citação (Sessão 1)</h3>
+                        <p class="text-sm text-center text-gray-400 mb-4">Porcentagem de participantes que falharam em citar corretamente sua própria redação.</p>
+                        <div class="chart-container h-64 md:h-80">
+                            <canvas id="citationChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-bold text-center mb-4 text-gray-100">Propriedade da Redação (Sessão 1)</h3>
+                        <p class="text-sm text-center text-gray-400 mb-4">Como os participantes perceberam sua autoria sobre o texto final.</p>
+                        <div class="chart-container h-64 md:h-80">
+                            <canvas id="ownershipChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="adaptacao" class="content-section">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-gray-100">A Dinâmica da Adaptação Cognitiva</h2>
+                    <p id="adaptacaoParagraph" class="mt-2 text-gray-300 max-w-2xl mx-auto inline">O que acontece quando os estudantes trocam de método? A Sessão 4 do estudo revela uma "inércia cognitiva": o cérebro se adapta ao descarregamento de tarefas, tornando difícil reengajar o esforço cognitivo profundo de forma independente.</p><button class="speaker-button" data-text-id="adaptacaoParagraph">🔊</button>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-gray-800 p-6 rounded-lg shadow-md text-center border-t-4 border-red-500">
+                        <div class="text-5xl mb-4">🧠 ➡️ 🤖</div>
+                        <h3 class="text-xl font-bold text-gray-100 mb-2">De Cérebro para LLM</h3>
+                        <p class="text-gray-300">Participantes que escreveram sem ajuda e depois usaram IA mostraram um <strong class="font-semibold text-blue-400">pico na conectividade cerebral</strong>. Isso indica um "custo de reengajamento" ativo, onde o cérebro trabalha intensamente para integrar as sugestões da IA com o conhecimento já existente.</p>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded-lg shadow-md text-center border-t-4 border-blue-500">
+                        <div class="text-5xl mb-4">🤖 ➡️ 🧠</div>
+                        <h3 class="text-xl font-bold text-gray-100 mb-2">De LLM para Cérebro</h3>
+                        <p class="text-gray-300">Participantes que usaram IA e depois tiveram que escrever sem ela mostraram <strong class="font-semibold text-red-400">conectividade neural mais fraca</strong> e déficits persistentes na memória. Isso sugere uma "inércia cognitiva" que dificulta o retorno à aprendizagem profunda.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="conclusao" class="content-section">
+                <div class="text-center mb-10 max-w-3xl mx-auto">
+                    <h2 class="text-3xl font-bold text-gray-100">Síntese: O Acúmulo de Dívida Cognitiva</h2>
+                    <p id="conclusaoParagraph" class="mt-2 text-gray-300 inline">A "dívida cognitiva" é a preocupação central. Os benefícios imediatos da IA (menos esforço, mais rapidez) podem levar a custos de longo prazo: redes neurais enfraquecidas, memória prejudicada e menor agência intelectual. A eficiência a curto prazo pode comprometer o processo de aprendizagem e o desenvolvimento de habilidades humanas fundamentais.</p><button class="speaker-button" data-text-id="conclusaoParagraph">🔊</button>
+                </div>
+                <div class="bg-gray-800 border-l-4 border-amber-500 text-gray-100 p-6 rounded-lg max-w-4xl mx-auto shadow">
+                    <h3 class="text-xl font-bold mb-3">Pergunta para Debate</h3>
+                    <p id="debateQuestion" class="text-lg">Dado que as ferramentas de IA reduzem a carga cognitiva e aumentam a eficiência, mas se correlacionam com engajamento neural diminuído e memória prejudicada, as instituições educacionais deveriam priorizar a produtividade aprimorada pela IA ou o cultivo da cognição humana profunda e esforçada, mesmo que isso signifique um progresso mais lento?</p>
+                    <div class="text-center mt-4">
+                        <button id="generateDebateBtn" class="bg-amber-500 text-white font-bold py-2 px-6 rounded-full shadow-md hover:bg-amber-600 transition duration-300">
+                            Gerar Pergunta para Debate ✨
+                        </button>
+                        <div id="debateLoader" class="loader mt-4"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const navButtons = document.querySelectorAll('.nav-button');
+            const contentSections = document.querySelectorAll('.content-section');
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const bandButtons = document.querySelectorAll('.band-button');
+            const searchInput = document.getElementById('searchInput');
+            const generateAnalysisBtn = document.getElementById('generateAnalysisBtn');
+            const analysisLoader = document.getElementById('analysisLoader');
+            const geminiAnalysis = document.getElementById('geminiAnalysis');
+            const generateDebateBtn = document.getElementById('generateDebateBtn');
+            const debateLoader = document.getElementById('debateLoader');
+            const debateQuestion = document.getElementById('debateQuestion');
+            const speakerButtons = document.querySelectorAll('.speaker-button');
+
+            let originalTexts = new Map();
+
+            function storeOriginalTexts() {
+                const elements = document.querySelectorAll('p, h1, h2, h3, strong');
+                elements.forEach(el => {
+                    if (!el.dataset.originalText) {
+                        el.dataset.originalText = el.innerHTML;
+                    }
+                });
+            }
+
+            function clearHighlights() {
+                document.querySelectorAll('.highlight').forEach(el => {
+                    const textNode = document.createTextNode(el.textContent);
+                    el.replaceWith(textNode);
+                });
+            }
+
+            function highlightText(searchTerm) {
+                clearHighlights();
+                if (!searchTerm) return;
+
+                const regex = new RegExp(searchTerm, 'gi');
+                const elements = document.querySelectorAll('p, h1, h2, h3, strong');
+
+                elements.forEach(el => {
+                    if (el.dataset.originalText) {
+                        const originalHtml = el.dataset.originalText;
+                        const newHtml = originalHtml.replace(regex, `<span class="highlight">$&</span>`);
+                        el.innerHTML = newHtml;
+                    }
+                });
+            }
+
+            const paradoxContent = {
+                carga: {
+                    promise: `<p data-original-text="A IA reduz a carga cognitiva em todos os níveis, especialmente a 'extrínseca' (relacionada à apresentação da informação) e a 'germânica' (esforço para construir esquemas mentais). Isso pode diminuir a frustração e aumentar a disposição para realizar tarefas.">A IA reduz a carga cognitiva em todos os níveis, especialmente a "extrínseca" (relacionada à apresentação da informação) e a "germânica" (esforço para construir esquemas mentais). Isso pode diminuir a frustração e aumentar a disposição para realizar tarefas.</p>`,
+                    cost: `<p data-original-text="A redução drástica da carga cognitiva germânica é o problema central. Ao simplificar a síntese de informações, a IA impede o esforço mental necessário para a aprendizagem profunda e a construção de esquemas mentais robustos, levando à 'erosão da carga germânica'.">A redução drástica da carga cognitiva <strong>germânica</strong> é o problema central. Ao simplificar a síntese de informações, a IA impede o esforço mental necessário para a aprendizagem profunda e a construção de esquemas mentais robustos, levando à "erosão da carga germânica".</p>`
+                },
+                critico: {
+                    promise: `<p data-original-text="A IA pode atuar como um 'parceiro de pensamento', ajudando a analisar dados, gerar hipóteses e explorar soluções alternativas. Pode estimular a reflexão e o pensamento divergente, servindo como um catalisador para a criatividade humana.">A IA pode atuar como um "parceiro de pensamento", ajudando a analisar dados, gerar hipóteses e explorar soluções alternativas. Pode estimular a reflexão e o pensamento divergente, servindo como um catalisador para a criatividade humana.</p>`,
+                    cost: `<p data-original-text="A dependência da IA pode levar a um 'ciclo de confiança-dependência'. A confiança na ferramenta diminui o pensamento crítico, o que reforça a dependência e corrói a autoconfiança e a motivação para o pensamento independente. O resultado é uma homogeneização do pensamento.">A dependência da IA pode levar a um "ciclo de confiança-dependência". A confiança na ferramenta diminui o pensamento crítico, o que reforça a dependência e corrói a autoconfiança e a motivação para o pensamento independente. O resultado é uma homogeneização do pensamento.</p>`
+                },
+                memoria: {
+                    promise: `<p data-original-text="Ao automatizar tarefas rotineiras, como a busca inicial de informações, a IA libera tempo para que os estudantes se concentrem em atividades de ordem superior, como a aplicação e avaliação do conhecimento.">Ao automatizar tarefas rotineiras, como a busca inicial de informações, a IA libera tempo para que os estudantes se concentrem em atividades de ordem superior, como a aplicação e avaliação do conhecimento.</p>`,
+                    cost: `<p data-original-text="Ocorre uma 'cognição externalizada'. Processos como memorização e síntese são descarregados para a IA. Isso prejudica a codificação da memória, a retenção de informações e leva a um senso diminuído de propriedade intelectual, como evidenciado pela incapacidade de citar o próprio trabalho.">Ocorre uma "cognição externalizada". Processos como memorização e síntese são descarregados para a IA. Isso prejudica a codificação da memória, a retenção de informações e leva a um senso diminuído de propriedade intelectual, como evidenciado pela incapacidade de citar o próprio trabalho.</p>`
+                }
+            };
+
+            const neuralData = {
+                Alpha: {
+                    labels: ['Cérebro-único', 'LLM', 'Motor de Busca'],
+                    values: [2.730, 2.222, 0.901],
+                    title: 'Banda Alpha (8-12 Hz)',
+                    explanation: 'Associada à <strong class="text-gray-100">atenção interna, ideação criativa e processamento semântico</strong>. A alta conectividade no grupo "Cérebro-único" sugere um processamento mais profundo e impulsionado internamente, sem pistas externas.'
+                },
+                Beta: {
+                    labels: ['Cérebro-único', 'LLM', 'Motor de Busca'],
+                    values: [2.681, 2.451, 0.434],
+                    title: 'Banda Beta (12-30 Hz)',
+                    explanation: 'Reflete <strong class="text-gray-100">engajamento cognitivo e motor sustentado, planejamento e funções executivas</strong>. A superioridade do grupo "Cérebro-único" indica um esforço cognitivo mais ativo e contínuo.'
+                },
+                Theta: {
+                    labels: ['Cérebro-único', 'LLM', 'Motor de Busca'],
+                    values: [2.055, 1.656, 0.826],
+                    title: 'Banda Theta (4-8 Hz)',
+                    explanation: 'Ligada à <strong class="text-gray-100">carga da memória de trabalho e ao controle executivo</strong>. A conectividade significativamente maior no grupo "Cérebro-único" aponta para uma maior carga cognitiva e coordenação ativa de múltiplos processos mentais.'
+                },
+                Delta: {
+                    labels: ['Cérebro-único', 'LLM', 'Motor de Busca'],
+                    values: [2.545, 1.653, 0.943],
+                    title: 'Banda Delta (0.1-4 Hz)',
+                    explanation: 'Indica <strong class="text-gray-100">controle executivo, monitoramento e integração multissensorial</strong>. A dominância do grupo "Cérebro-único" mostra um recrutamento aprimorado de redes neurais distribuídas para tarefas internas complexas.'
+                }
+            };
+            
+            const citationData = {
+                labels: ['Grupo LLM', 'Grupo Motor de Busca', 'Grupo Cérebro-único'],
+                datasets: [{
+                    label: 'Falha na Citação (%)',
+                    data: [83.3, 11.1, 11.1],
+                    backgroundColor: ['#ef4444', '#60a5fa', '#34d399'],
+                    borderColor: ['#dc2626', '#3b82f6', '#10b981'],
+                    borderWidth: 1
+                }]
+            };
+
+            const ownershipData = {
+                labels: ['Grupo LLM', 'Grupo Motor de Busca', 'Grupo Cérebro-único'],
+                datasets: [
+                    {
+                        label: 'Nenhuma Propriedade',
+                        data: [16.7, 0, 0],
+                        backgroundColor: '#ef4444',
+                    },
+                    {
+                        label: 'Propriedade Parcial',
+                        data: [33.3, 66.7, 11.1],
+                        backgroundColor: '#f97316',
+                    },
+                    {
+                        label: 'Propriedade Total',
+                        data: [50, 33.3, 88.9],
+                        backgroundColor: '#22c55e',
+                    }
+                ]
+            };
+
+            let neuralChart, citationChart, ownershipChart;
+
+            function updateParadoxContent(tab) {
+                document.getElementById('promise-content').innerHTML = paradoxContent[tab].promise;
+                document.getElementById('cost-content').innerHTML = paradoxContent[tab].cost;
+            }
+
+            function updateNeuralChart(band) {
+                const data = neuralData[band];
+                document.getElementById('band-title').innerText = data.title;
+                document.getElementById('band-explanation').innerHTML = data.explanation;
+                
+                neuralChart.data.datasets[0].data = data.values;
+                neuralChart.data.labels = data.labels;
+                neuralChart.update();
+            }
+
+            function createNeuralChart() {
+                const ctx = document.getElementById('neuralChart').getContext('2d');
+                neuralChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: neuralData.Alpha.labels,
+                        datasets: [{
+                            label: 'Soma Total de Conectividade (dDTF)',
+                            data: neuralData.Alpha.values,
+                            backgroundColor: ['#34d399', '#ef4444', '#60a5fa'],
+                            borderColor: ['#10b981', '#dc2626', '#3b82f6'],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        indexAxis: 'y',
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return ` Conectividade: ${context.raw.toFixed(3)}`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Força da Conectividade Neural (dDTF)',
+                                    color: '#f9fafb'
+                                },
+                                ticks: {
+                                    color: '#d1d5db'
+                                }
+                            },
+                            y: {
+                                ticks: {
+                                    color: '#d1d5db'
+                                }
+                            }
+                        }
+                    }
+                });
+                updateNeuralChart('Alpha');
+            }
+
+            function createCitationChart() {
+                 const ctx = document.getElementById('citationChart').getContext('2d');
+                 citationChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: citationData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false,
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `${context.dataset.label}: ${context.raw}%`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100,
+                                title: {
+                                    display: true,
+                                    text: '%',
+                                    color: '#f9fafb'
+                                },
+                                ticks: {
+                                    color: '#d1d5db'
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    color: '#d1d5db'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            function createOwnershipChart() {
+                const ctx = document.getElementById('ownershipChart').getContext('2d');
+                ownershipChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: ownershipData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    color: '#f9fafb'
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `${context.dataset.label}: ${context.raw}%`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                stacked: true,
+                                ticks: {
+                                    color: '#d1d5db'
+                                }
+                            },
+                            y: {
+                                stacked: true,
+                                beginAtZero: true,
+                                max: 100,
+                                 title: {
+                                    display: true,
+                                    text: '% dos Participantes',
+                                    color: '#f9fafb'
+                                },
+                                ticks: {
+                                    color: '#d1d5db'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            navButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.dataset.target;
+
+                    navButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+
+                    contentSections.forEach(section => {
+                        if (section.id === targetId) {
+                            section.classList.add('active');
+                        } else {
+                            section.classList.remove('active');
+                        }
+                    });
+                    clearHighlights();
+                    searchInput.value = '';
+                });
+            });
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('active');
+                        btn.classList.add('bg-gray-700', 'text-gray-100');
+                    });
+                    button.classList.add('active');
+                    button.classList.remove('bg-gray-700', 'text-gray-100');
+                    updateParadoxContent(button.dataset.tab);
+                    clearHighlights();
+                });
+            });
+
+            bandButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    bandButtons.forEach(btn => {
+                        btn.classList.remove('bg-amber-500', 'text-white');
+                        btn.classList.add('bg-gray-700', 'text-gray-100');
+                    });
+                    button.classList.add('bg-amber-500', 'text-white');
+                    button.classList.remove('bg-gray-700', 'text-gray-100');
+                    updateNeuralChart(button.dataset.band);
+                    clearHighlights();
+                });
+            });
+
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.trim();
+                highlightText(searchTerm);
+            });
+
+            generateAnalysisBtn.addEventListener('click', async () => {
+                const promiseText = document.getElementById('promise-content').textContent;
+                const costText = document.getElementById('cost-content').textContent;
+                const prompt = `Com base nas informações do relatório sobre a dívida cognitiva da IA, analise o seguinte paradoxo: A promessa da IA é: "${promiseText}". O custo da IA é: "${costText}". Gere uma nova e concisa análise ou um insight adicional. Responda em português.`;
+                
+                analysisLoader.style.display = 'block';
+                generateAnalysisBtn.disabled = true;
+                geminiAnalysis.style.display = 'none';
+
+                try {
+                    let chatHistory = [];
+                    chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                    const payload = { contents: chatHistory };
+                    const apiKey = ""
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    const text = result?.candidates?.[0]?.content?.parts?.[0]?.text || 'Não foi possível gerar uma análise. Tente novamente.';
+                    geminiAnalysis.innerHTML = `<h4 class="text-lg font-semibold text-amber-400 mb-2">Análise Gerada pela IA</h4><p>${text}</p>`;
+                    geminiAnalysis.style.display = 'block';
+                    geminiAnalysis.classList.add('gemini-response');
+
+                } catch (error) {
+                    geminiAnalysis.innerHTML = `<h4 class="text-lg font-semibold text-amber-400 mb-2">Análise Gerada pela IA</h4><p>Erro ao gerar a análise. Por favor, tente novamente.</p>`;
+                    geminiAnalysis.style.display = 'block';
+                    geminiAnalysis.classList.add('gemini-response');
+                } finally {
+                    analysisLoader.style.display = 'none';
+                    generateAnalysisBtn.disabled = false;
+                }
+            });
+
+            generateDebateBtn.addEventListener('click', async () => {
+                const prompt = `Com base nas informações sobre o relatório da dívida cognitiva da IA, gere uma nova e instigante pergunta para debate, focando na relação entre eficiência e o desenvolvimento cognitivo. Responda em português.`;
+                
+                debateLoader.style.display = 'block';
+                generateDebateBtn.disabled = true;
+
+                try {
+                    let chatHistory = [];
+                    chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                    const payload = { contents: chatHistory };
+                    const apiKey = ""
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    const text = result?.candidates?.[0]?.content?.parts?.[0]?.text || 'Não foi possível gerar uma pergunta. Tente novamente.';
+                    debateQuestion.innerHTML = `<em>${text}</em>`;
+                    debateQuestion.classList.add('gemini-response');
+
+                } catch (error) {
+                    debateQuestion.innerHTML = `<em>Erro ao gerar a pergunta. Por favor, tente novamente.</em>`;
+                    debateQuestion.classList.add('gemini-response');
+                } finally {
+                    debateLoader.style.display = 'none';
+                    generateDebateBtn.disabled = false;
+                }
+            });
+            
+            speakerButtons.forEach(button => {
+                button.addEventListener('click', async (e) => {
+                    const textElement = document.getElementById(e.target.dataset.textId);
+                    const textToSpeak = textElement.textContent.trim();
+                    
+                    try {
+                        const payload = {
+                            contents: [{
+                                parts: [{ text: textToSpeak }]
+                            }],
+                            generationConfig: {
+                                responseModalities: ["AUDIO"],
+                                speechConfig: {
+                                    voiceConfig: {
+                                        prebuiltVoiceConfig: { voiceName: "Puck" }
+                                    }
+                                }
+                            },
+                            model: "gemini-2.5-flash-preview-tts"
+                        };
+                        const apiKey = "";
+                        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+                        const response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                        
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+
+                        const result = await response.json();
+                        const part = result?.candidates?.[0]?.content?.parts?.[0];
+                        const audioData = part?.inlineData?.data;
+                        const mimeType = part?.inlineData?.mimeType;
+
+                        if (audioData && mimeType && mimeType.startsWith("audio/")) {
+                            const pcmData = Uint8Array.from(atob(audioData), c => c.charCodeAt(0)).buffer;
+                            const pcm16 = new Int16Array(pcmData);
+                            
+                            function pcmToWav(pcm16, sampleRate = 16000) {
+                                const buffer = new ArrayBuffer(44 + pcm16.length * 2);
+                                const view = new DataView(buffer);
+                                
+                                function writeString(view, offset, string) {
+                                    for (let i = 0; i < string.length; i++) {
+                                        view.setUint8(offset + i, string.charCodeAt(i));
+                                    }
+                                }
+
+                                writeString(view, 0, 'RIFF');
+                                view.setUint32(4, 36 + pcm16.length * 2, true);
+                                writeString(view, 8, 'WAVE');
+                                writeString(view, 12, 'fmt ');
+                                view.setUint32(16, 16, true);
+                                view.setUint16(20, 1, true);
+                                view.setUint16(22, 1, true);
+                                view.setUint32(24, sampleRate, true);
+                                view.setUint32(28, sampleRate * 2, true);
+                                view.setUint16(32, 2, true);
+                                view.setUint16(34, 16, true);
+                                writeString(view, 36, 'data');
+                                view.setUint32(40, pcm16.length * 2, true);
+                                
+                                let offset = 44;
+                                for (let i = 0; i < pcm16.length; i++) {
+                                    view.setInt16(offset + i * 2, pcm16[i], true);
+                                }
+                                return new Blob([view], { type: 'audio/wav' });
+                            }
+                            
+                            const wavBlob = pcmToWav(pcm16);
+                            const audioUrl = URL.createObjectURL(wavBlob);
+                            const audio = new Audio(audioUrl);
+                            audio.play();
+
+                        } else {
+                            throw new Error('Formato de áudio inesperado ou dados ausentes.');
+                        }
+                    } catch (error) {
+                        console.error('Erro na chamada da API de TTS:', error);
+                    }
+                });
+            });
+
+            updateParadoxContent('carga');
+            createNeuralChart();
+            createCitationChart();
+            createOwnershipChart();
+            storeOriginalTexts();
+        });
+    </script>
+
+</body>
+</html>
